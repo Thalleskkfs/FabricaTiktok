@@ -1,0 +1,7 @@
+idiomas:
+  - br
+  - en
+  - es
+nicho: psicologia_dark
+videos_por_lote: 30
+dry_run: false
