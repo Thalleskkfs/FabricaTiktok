@@ -1,0 +1,8 @@
+moviepy==2.2.1
+pyttsx3==2.99
+PyYAML==6.0.2
+requests==2.32.3
+numpy==2.2.1
+pillow==11.0.0
+imageio==2.36.1
+imageio-ffmpeg==0.5.1
