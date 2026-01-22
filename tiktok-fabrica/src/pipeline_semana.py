@@ -35,14 +35,8 @@ def criar_diretorio_lote(base_dir: Path) -> Path:
     return lote_dir
 
 
-def main() -> None:
-    base_dir = Path(__file__).resolve().parents[1]
-    config_path = base_dir / "config" / "config.yaml"
-
-    print("🔧 Carregando configurações...")
-    config = carregar_config(config_path)
-
-    print("🗂️ Criando diretório do lote...")
+def run_pipeline(config: dict, base_dir: Path | None = None) -> None:
+    base_dir = base_dir or Path(__file__).resolve().parents[1]
     lote_dir = criar_diretorio_lote(base_dir)
     media_root = base_dir / "media"
 
@@ -89,8 +83,14 @@ def main() -> None:
     tempo_m5 = perf_counter() - inicio_m5
 
     total_tempo = perf_counter() - total_inicio
-    m3_times = [s.get("m3_time_seconds", 0.0) for s in scripts_com_video if s.get("status") == "ok"]
-    m4_times = [s.get("m4_time_seconds", 0.0) for s in scripts_finalizados if s.get("status") == "ok"]
+    m3_times = [
+        s.get("m3_time_seconds", 0.0) for s in scripts_com_video if s.get("status") == "ok"
+    ]
+    m4_times = [
+        s.get("m4_time_seconds", 0.0)
+        for s in scripts_finalizados
+        if s.get("status") == "ok"
+    ]
     m3_avg = sum(m3_times) / len(m3_times) if m3_times else 0.0
     m4_avg = sum(m4_times) / len(m4_times) if m4_times else 0.0
 
@@ -103,6 +103,17 @@ def main() -> None:
     print(f"  - TOTAL: {total_tempo:.1f}s")
 
     print(f"✅ Lote gerado com sucesso em {lote_dir}!")
+
+
+def main() -> None:
+    base_dir = Path(__file__).resolve().parents[1]
+    config_path = base_dir / "config" / "config.yaml"
+
+    print("🔧 Carregando configurações...")
+    config = carregar_config(config_path)
+
+    print("🗂️ Criando diretório do lote...")
+    run_pipeline(config, base_dir=base_dir)
 
 
 if __name__ == "__main__":
